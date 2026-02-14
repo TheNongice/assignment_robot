@@ -1,11 +1,18 @@
 *** Settings ***
 Library    SeleniumLibrary
+Library    OperatingSystem
 Resource   variable.resource
 
 *** Keywords ***
 Open Browser CU Hotel
-    Open Browser    ${WEB_URL}     ${BROWSER}
-    Maximize Browser Window
+    ${is_ci}=    Get Environment Variable    CI    default=False
+    IF    '${is_ci}' == 'true'
+        Open Browser    ${WEB_URL}     headlesschrome    options=add_argument("--no-sandbox"); add_argument("--disable-dev-shm-usage")
+    ELSE
+        Open Browser    ${WEB_URL}     chrome
+        Maximize Browser Window
+    END
+
     Sleep    5s
     Scroll Element Into View    //*[@class='LWbAav Kv1aVt']
     Scroll Element Into View    //*[@class='JVi7i2 comp-lt33fcq1 wixui-form']
