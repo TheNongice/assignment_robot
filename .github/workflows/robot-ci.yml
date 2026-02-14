@@ -1,0 +1,37 @@
+name: Robot Framework CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    container:
+      image: marketsquare/robotframework-browser:latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Robot Test
+        run: |
+          robot --outputdir results assignment.robot
+
+      - name: Prepare Pages content
+        run: |
+          mkdir public
+          cp -r results/* public/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
