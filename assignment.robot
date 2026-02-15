@@ -19,6 +19,8 @@ Verify registration form with all input field
     Click "Yes" Pet
     Click I accepted term
     
+    # After clicking "submitted." I only check the requirement textbox!
+    # We can't verify more than these methods because of CAPTCHA issues.
     Click Submit
 
     Check Firstname is       'valid'
